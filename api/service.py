@@ -2,7 +2,7 @@ import os
 
 from flask import Flask, jsonify, request, send_from_directory
 
-from backend.llm_request import generate_picture
+from backend.llm_request import generate_text
 
 app = Flask(__name__, static_folder='./../frontend/public', static_url_path='')
 
