@@ -1,8 +1,7 @@
 <script>
   export let pictureId;
-  export let loadPicture;
 
-  let feedbackText = "";
+  let text = "";
   let isSubmitting = false;
 
   $: pictureId;
@@ -14,12 +13,12 @@
     isSubmitting = true;
 
     try {
-      const response = await fetch("/hello/" + pictureId, {
+      const response = await fetch("/request", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ feedback: feedbackText }),
+        body: JSON.stringify({ text: text }),
       });
 
       if (!response.ok) {
@@ -28,8 +27,8 @@
       }
 
       const responseData = await response.json();
-      pictureId = responseData.pictureId;
-      loadPicture(event);
+
+      alert(responseData);
     } catch (error) {
       console.error("Fetch error:", error);
     } finally {
@@ -40,6 +39,6 @@
 </script>
 
 <form>
-  <input type="text" bind:value={feedbackText} required />
+  <input type="text" bind:value={text} required />
   <button on:click={sendRequest} disabled={isSubmitting}>Senden</button>
 </form>

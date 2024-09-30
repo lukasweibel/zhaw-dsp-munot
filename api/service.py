@@ -1,8 +1,8 @@
 import os
 
-from flask import Flask, jsonify, send_from_directory
+from flask import Flask, jsonify, request, send_from_directory
 
-from backend.image_generation import generate_picture
+from backend.llm_request import generate_picture
 
 app = Flask(__name__, static_folder='./../frontend/public', static_url_path='')
 
@@ -12,10 +12,12 @@ def index():
     return send_from_directory(app.static_folder, 'index.html')
 
 
-@app.route('/hello', methods=['GET'])
-def getHistory():
-    data = 'Hello World!'
-    return jsonify(data)
+@app.route('/request', methods=['POST'])
+def postRequest():
+    data = request.get_json()
+    text = data.get('text', 'No text provided')
+    text = text + " from the Backend"
+    return jsonify(text)
 
 
 if __name__ == '__main__':
