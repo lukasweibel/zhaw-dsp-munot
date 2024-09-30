@@ -13,11 +13,11 @@ jobs:
 
       - name: Generate Docker Tag
         id: docker_tag
-        run: echo "::set-output name=tag::lukasweibel99/lens-less:build-${GITHUB_RUN_NUMBER}"
+        run: echo "::set-output name=tag::lukasweibel99/zhaw-dsp-munot:build-${GITHUB_RUN_NUMBER}"
 
       - name: Build Docker Image
         run: docker build -t ${{ steps.docker_tag.outputs.tag }} .
-      
+
       - name: Log in to Dockerhub and push image
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
