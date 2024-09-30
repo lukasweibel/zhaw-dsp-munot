@@ -1,0 +1,35 @@
+name: Deploy on Azure
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout repo content
+        uses: actions/checkout@v3
+
+      - name: Generate Docker Tag
+        id: docker_tag
+        run: echo "::set-output name=tag::lukasweibel99/lens-less:build-${GITHUB_RUN_NUMBER}"
+
+      - name: Build Docker Image
+        run: docker build -t ${{ steps.docker_tag.outputs.tag }} .
+      
+      - name: Log in to Dockerhub and push image
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        run: |
+          echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+          docker push ${{ steps.docker_tag.outputs.tag }}
+
+      - name: Deploy to Azure Web App
+        id: deploy-to-webapp
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: lens-less
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          images: ${{ steps.docker_tag.outputs.tag }}
