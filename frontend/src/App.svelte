@@ -13,8 +13,8 @@
   <div class="navbar">
     <h1>Munot DSP Projekt</h1>
     <div>
-      <a href="#" on:click={() => navigate("chat")}>Chat</a>
-      <a href="#" on:click={() => navigate("history")}>Sust öppis</a>
+      <a on:click={() => navigate("chat")}>Chat</a>
+      <a on:click={() => navigate("history")}>Sust öppis</a>
     </div>
   </div>
 </nav>
