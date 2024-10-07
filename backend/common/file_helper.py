@@ -1,0 +1,4 @@
+def load_txt_file(path):
+    with open(path, 'r', encoding='utf-8') as file:
+        content = file.read()
+    return content

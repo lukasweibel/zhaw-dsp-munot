@@ -1,7 +1,8 @@
 import os
+
 import openai
-from openai import OpenAI
 from dotenv import load_dotenv
+from openai import OpenAI
 
 load_dotenv()
 
@@ -11,15 +12,14 @@ openai.api_key = openai_api_key
 
 
 def generate_text(prompt):
-    return "DUMMY RESPONSE GPT"
-    #try:
-    #    client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"),)
-    #    chat_completion = client.chat.completions.create(
-    #       messages=[{"role": "user","content": "Say i am Gpt3.5",}],model="gpt-3.5-turbo",)
+    try:
+        client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"), )
+        chat_completion = client.chat.completions.create(
+            messages=[{"role": "user", "content": prompt, }], model="gpt-3.5-turbo", )
 
-    #generated_text = chat_completion.choices[0].message.content
-    #    print(generated_text)
-    #    return str(generated_text)
-    #except Exception as e:
-    #    print(f"Error: {e}")
-#    return None
+        generated_text = chat_completion.choices[0].message.content
+        print(generated_text)
+        return str(generated_text)
+    except Exception as e:
+        print(f"Error: {e}")
+        return None
