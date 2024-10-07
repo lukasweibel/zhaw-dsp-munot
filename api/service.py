@@ -3,6 +3,7 @@ import os
 from flask import Flask, jsonify, request, send_from_directory
 
 from backend.llm_request import generate_text
+from backend.db_service import dummy_db_request
 
 app = Flask(__name__, static_folder='./../frontend/public', static_url_path='')
 
@@ -17,6 +18,8 @@ def postRequest():
     data = request.get_json()
     text = data.get('text', 'No text provided')
     text = text + " from the Backend"
+    text = text + dummy_db_request()
+    text = text + generate_text(text)
     return jsonify(text)
 
 
