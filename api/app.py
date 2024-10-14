@@ -2,8 +2,7 @@ import os
 
 from flask import Flask, jsonify, request, send_from_directory
 
-from backend.llm_request import generate_text
-from backend.service import retrieve_data_from_db
+from backend.service import receive_layered_response
 
 app = Flask(__name__, static_folder='./../frontend/public', static_url_path='')
 
@@ -17,7 +16,7 @@ def index():
 def postRequest():
     data = request.get_json()
     user_input = data.get('text', 'No text provided')
-    response_text =retrieve_data_from_db(user_input)
+    response_text = receive_layered_response(user_input)
     return jsonify(response_text)
 
 

@@ -101,3 +101,6 @@ ALTER TABLE `verein`
 ALTER TABLE `ergebnisse_gy`
   ADD CONSTRAINT `disziplin_gyfk_constraint` FOREIGN KEY (`disziplin`) REFERENCES `disziplinen` (`id`),
   ADD CONSTRAINT `verein_gyfk_constraint` FOREIGN KEY (`verein`) REFERENCES `verein` (`id`);
+
+
+Antworte nur mit dem SQL Statement als Text!
