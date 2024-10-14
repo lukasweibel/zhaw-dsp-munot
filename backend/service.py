@@ -1,17 +1,9 @@
-from backend.common.file_helper import load_txt_file
-from backend.data.in_memory_db import execute_sql
-from backend.llm_request import generate_text
+from backend.layers.db_layer import retrieve_data_from_db
+from backend.layers.text_layer import result_set_to_natural_language
+from backend.layers.typo_layer import clear_typos_in_user_question
 
 
-def retrieve_data_from_db(user_input):
-    # Let LLM Create Select Statement
-    base_prompt= load_txt_file('./backend/prompt/prompt.txt')
-    print(base_prompt)
-    prompt= f"{base_prompt}\n\nUser Request: \n{user_input}"
-    print(prompt)
-    sql = generate_text(prompt)
-    print(sql)
-
-    response = str(execute_sql(sql))
-    print(response)
-    return response
+def tbd_get_me_a_name(user_question):
+    cleared_user_question = clear_typos_in_user_question(user_question)
+    db_result_set = retrieve_data_from_db(cleared_user_question)
+    natural_language= result_set_to_natural_language(db_result_set)
