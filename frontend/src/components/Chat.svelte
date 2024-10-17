@@ -23,7 +23,7 @@
         alert("Es ist ein Fehler aufgetreten");
         throw new Error("Error");
       }
-
+      text = "";
       const responseData = await response.json();
       chatHistory = [...chatHistory, { sender: "bot", message: responseData }];
       console.log(chatHistory);
