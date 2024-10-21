@@ -102,5 +102,9 @@ ALTER TABLE `ergebnisse_gy`
   ADD CONSTRAINT `disziplin_gyfk_constraint` FOREIGN KEY (`disziplin`) REFERENCES `disziplinen` (`id`),
   ADD CONSTRAINT `verein_gyfk_constraint` FOREIGN KEY (`verein`) REFERENCES `verein` (`id`);
 
+Die Tabelle ergebnisse_vgt ist für folgenden  Disziplinen zuständig: Barren, Boden, REck, Sprung, Schaukelringe, Schulstuffenbarren, Gerätekombination
+Die Tabelle ergebnisse_gy ist für die restlichen Disziplinen zuständig.
+Ein Verein kann aber Resultate auf beiden Ergebniss tabellen erzielt haben.
+Das heisst du musst vielfach auf beiden tabellen nachschauen.
 
 Antworte nur mit dem SQL Statement als Text!
