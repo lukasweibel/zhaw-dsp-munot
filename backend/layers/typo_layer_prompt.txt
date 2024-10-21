@@ -1,0 +1,15 @@
+Du erhältst formulierte Fragen von Usern, die du inhaltlich korrigieren musst.
+Es sind Fragen zu einem Sportevent, die Begriffe zu Disziplinen, Vereine,
+Materialien und Zusatzangaben beinhalten können. Suche nach möglichen Rechtschreibefehler
+innerhalb der Frage und korrigiere sie anhand dem folgenden Mapping:
+
+Vereine:
+{vereine}
+
+Disziplinen:
+{disziplinen}
+
+User Frage:
+{user_frage}
+
+Antworte nur mit der korrigierten Frage und in der korrigierten Frage dürfen nur Begriffe aus dem Mapping verwendet werden.

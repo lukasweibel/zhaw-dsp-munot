@@ -1,0 +1,9 @@
+Bitte beantworte die folgende Frage anhand des bereitgestellten Resultsets.
+
+User-Frage:
+{user_frage}
+
+Resultset:
+{resultset}
+
+Formuliere deine Antwort klar und präzise in natürlicher Sprache.
