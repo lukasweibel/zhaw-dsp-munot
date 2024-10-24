@@ -1,47 +1,39 @@
+from langchain.vectorstores import FAISS
+from langchain_openai import OpenAIEmbeddings
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain_community.document_loaders import PyPDFLoader
 from langchain.chains import create_retrieval_chain
 from langchain.chains.combine_documents import create_stuff_documents_chain
 from langchain.prompts import ChatPromptTemplate
 from langchain_openai import ChatOpenAI
-from langchain.vectorstores import InMemoryVectorStore
-from langchain_openai import OpenAIEmbeddings
-from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain_community.document_loaders import PyPDFLoader
 
-file_path = "backend/data/VGT_Weisungen_2018_d_01.pdf"
-loader = PyPDFLoader(file_path)
 
-docs = loader.load()
+def get_pdf_answer(file_path, question):
+    loader = PyPDFLoader(file_path)
+    docs = loader.load()
 
-llm = ChatOpenAI(model="gpt-3.5-turbo")
+    text_splitter = RecursiveCharacterTextSplitter(
+        chunk_size=1000, chunk_overlap=100)
+    splits = text_splitter.split_documents(docs)
 
-text_splitter = RecursiveCharacterTextSplitter(
-    chunk_size=1000, chunk_overlap=200
-)
-splits = text_splitter.split_documents(docs)
-vectorstore = InMemoryVectorStore.from_documents(
-    documents=splits, embedding=OpenAIEmbeddings()
-)
+    vectorstore = FAISS.from_documents(
+        documents=splits, embedding=OpenAIEmbeddings())
 
-retriever = vectorstore.as_retriever()
+    retriever = vectorstore.as_retriever(k=10)
 
-system_prompt = (
-    "Du bist mein Assistent, welcher Fragen zu diesem PDF beantworten kann"
-    "\n\n"
-    "{context}"
-)
+    system_prompt = (
+        "Du bist mein Assistent, welcher Fragen zu diesem PDF beantworten kann."
+        "\n\n"
+        "{context}"
+    )
 
-prompt = ChatPromptTemplate.from_messages(
-    [
-        ("system", system_prompt),
-        ("human", "{input}")
-    ]
-)
+    prompt = ChatPromptTemplate.from_messages(
+        [("system", system_prompt), ("human", "{input}")])
 
-question_answer_chain = create_stuff_documents_chain(llm, prompt)
-rag_chain = create_retrieval_chain(retriever, question_answer_chain)
+    llm = ChatOpenAI(model="gpt-4")
+    question_answer_chain = create_stuff_documents_chain(llm, prompt)
+    rag_chain = create_retrieval_chain(retriever, question_answer_chain)
 
-results = rag_chain.invoke(
-    {"input": "Was ist die maximale Teilnote für Einzelausführung?"}
-)
+    results = rag_chain.invoke({"input": question})
 
-print(results['answer'])
+    return results['answer']
