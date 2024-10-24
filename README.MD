@@ -7,6 +7,15 @@
 
 - start.sh file ausführen (muss evt angepasst werden)
 
+or:
+
+Frontend: 
+- cd ./frontend
+- npm start
+
+Backend:
+- flask run
+
 ## Integrationstest starten
 Applikation starten
 anderes Fensster
