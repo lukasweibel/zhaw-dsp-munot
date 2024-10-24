@@ -5,7 +5,7 @@ from backend.data.db_wrapper import execute_sql
 
 def retrieve_data_from_db(user_input):
     # Let LLM Create Select Statement
-    base_prompt = load_txt_file('./backend/layers/db_layer_prompt.txt')
+    base_prompt = load_txt_file('./backend/layers/prompts/db_layer_prompt.txt')
     prompt = f"{base_prompt}\n\nUser Request: \n{user_input}"
     sql = generate_text(prompt)
 

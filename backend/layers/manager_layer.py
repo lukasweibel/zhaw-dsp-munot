@@ -27,8 +27,8 @@ schema = {
 
 
 def ask_for_needed_layers(user_question):
-    base_prompt = load_txt_file('./backend/layers/manager_layer_prompt.txt')
-    prompt = prompt = base_prompt.replace('{user_frage}', str(user_question))
+    base_prompt = load_txt_file('./backend/layers/prompts/manager_layer_prompt.txt')
+    prompt = base_prompt.replace('{user_frage}', str(user_question))
     layers = generate_text(prompt)
     layers = layers.replace("'", '"')
     layers_json = json.loads(layers)

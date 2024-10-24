@@ -4,10 +4,17 @@ from backend.layers.typo_layer import clear_typos_in_user_question
 from backend.layers.manager_layer import ask_for_needed_layers
 from backend.layers.pdf_layer import get_pdf_answer
 from backend.layers.merge_layer import merge_results_to_one_answer
+from backend.layers.validator_layer import validate_user_question
 
 
 def receive_layered_response(user_question):
     results = []
+    
+    question_validation = validate_user_question(user_question)
+    validator_assessment = question_validation.get('assessment')
+    if validator_assessment == 'INVALID':
+        validator_reason = question_validation.get('reason')
+        return validator_reason
 
     layers = ask_for_needed_layers(user_question)
 
