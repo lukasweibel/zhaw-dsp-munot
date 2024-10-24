@@ -1,0 +1,3 @@
+Beantworte folgende frage: {user_frage}
+
+Mit folgenden einträgen im results array: {results}
