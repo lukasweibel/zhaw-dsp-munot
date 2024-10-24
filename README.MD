@@ -6,3 +6,9 @@
 ## Start App
 
 - start.sh file ausführen (muss evt angepasst werden)
+
+## Integrationstest starten
+Applikation starten
+anderes Fensster
+venv starten
+python -m unittest test.IntegrationTests
