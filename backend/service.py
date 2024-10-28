@@ -8,6 +8,7 @@ from backend.layers.validator_layer import validate_user_question
 
 
 def receive_layered_response(user_question):
+    print("User question:\n" + user_question)
     results = []
     
     question_validation = validate_user_question(user_question)

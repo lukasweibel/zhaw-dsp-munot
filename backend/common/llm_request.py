@@ -18,7 +18,6 @@ def generate_text(prompt):
             messages=[{"role": "user", "content": prompt, }], model="gpt-3.5-turbo", )
 
         generated_text = chat_completion.choices[0].message.content
-        print(generated_text)
         return str(generated_text)
     except Exception as e:
         print(f"Error: {e}")
