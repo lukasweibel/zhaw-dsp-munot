@@ -28,16 +28,15 @@ def ask_question(question):
     url = "http://127.0.0.1:5000/request"
     data = {"text": question}
     response = requests.post(url, json=data)
-    print("Response Text:", response.text)
+    print("-----------------------------------------------------------------------------------")
+    print("Question:", question)
     return response.text
 
 
 def assert_meaning(expected, actual):
-    prompt = """Vergleiche zwei kurze Sätze und führe eine sinnbezogene Überprüfung durch.
-             Du erhältst zwei Eingaben: einen erwarteten (expected) und einen tatsächlichen (actual) Satz.
-             Das Ziel ist es festzustellen, ob die Bedeutung beider Sätze übereinstimmt,
-             unabhängig von der Formulierung. Gib nur True zurück, wenn die Bedeutung der Sätze gleich ist, oder False,
-              wenn sie unterschiedlich ist. Antworte nur mit 'True' oder 'False'"""
+    print("Expected Response:", expected)
+    print("Actual Response:", actual)
+    prompt = """Vergleiche zwei Sätze auf sinnbezogene Übereinstimmung. Du erhältst zwei Eingaben: einen erwarteten (expected) und einen tatsächlichen (actual) Satz. Das Ziel ist es, festzustellen, ob beide Sätze dieselbe Aussage treffen, unabhängig von der genauen Formulierung, Details oder Reihenfolge der Informationen. Berücksichtige nur die wesentlichen Inhalte und Kernpunkte. Gib 'True' zurück, wenn die wesentlichen Informationen übereinstimmen, und 'False' nur dann, wenn sie wirklich unterschiedlich sind. Antworte nur mit 'True' oder 'False'."""
     prompt += "Expected: " + expected + "\n"
     prompt += "Actual: " + actual + "\n"
     response = generate_text(prompt)
@@ -50,4 +49,5 @@ def parse_to_bool(result):
     elif result == "False":
         return False
     else:
-        raise ValueError(f"Unexpected result: {result}")  # Handle unexpected values
+        # Handle unexpected values
+        raise ValueError(f"Unexpected result: {result}")
