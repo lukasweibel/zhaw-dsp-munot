@@ -7,4 +7,5 @@ def result_set_to_natural_language(original_question, resultset):
     prompt = base_prompt.format(
         user_frage=original_question, resultset=resultset)
     answer = generate_text(prompt)
+    print("Text response:\n" + answer)
     return answer

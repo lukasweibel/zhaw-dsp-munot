@@ -9,5 +9,5 @@ def validate_user_question(user_question):
     prompt = f"{base_prompt}\n\nDein zu überprufender Text lautet: \n{user_question}"
     answer = generate_text(prompt)
     answer_json = json.loads(answer)
-    print(answer_json)
+    print("Validator response:\n" + answer)
     return answer_json

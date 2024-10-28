@@ -17,6 +17,7 @@ def postRequest():
     data = request.get_json()
     user_input = data.get('text', 'No text provided')
     response_text = receive_layered_response(user_input)
+    print("Returning following answer to user:\n" + response_text)
     return jsonify(response_text)
 
 

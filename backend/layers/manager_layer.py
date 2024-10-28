@@ -33,5 +33,5 @@ def ask_for_needed_layers(user_question):
     layers = layers.replace("'", '"')
     layers_json = json.loads(layers)
     validate(instance=layers_json, schema=schema)
-    print(layers_json)
+    print("Manager response:\n" + layers)
     return layers_json

@@ -10,8 +10,7 @@ def clear_typos_in_user_question(user_question):
     disziplinen = execute_sql('select id,name from disziplinen')
     prompt = prompt.replace('{disziplinen}', str(disziplinen))
     prompt = prompt.replace('{user_frage}', user_question)
-    print(prompt)
     # ChatGPt ersetze mir die Mannschaften und Disziplinen mit ihren IDS {a,b}
     cleared_user_question = generate_text(prompt)
-    print(cleared_user_question)
+    print("Typo response:\n" + cleared_user_question)
     return cleared_user_question
