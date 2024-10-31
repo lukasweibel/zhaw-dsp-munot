@@ -72,3 +72,8 @@ class IntegrationTest(unittest.TestCase):
         actual = ask_question("Welche Disziplin turnt der Verein TV Andelfingen um 13:40?")
         a = assert_meaning("Der Verein TV Andelfingen turn um 13:40 die Disziplin BA", actual)
         self.assertTrue(a)
+
+    def test_podest_barren(self):
+        actual = ask_question("Welche Vereine standen in der Disziplin Barren auf dem Podest?")
+        a = assert_meaning("In der Disziplin Barren standen die folgenden Vereine auf dem Podest: Der TV/DR Dägerlen belegte den ersten Platz, gefolgt vom DTV/TV Beggingen auf dem zweiten Platz und dem TV Eschlikon, der den dritten Platz erreichte.", actual)
+        self.assertTrue(a)
