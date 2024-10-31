@@ -1,4 +1,4 @@
-from flask import json
+import json
 from jsonschema import validate
 from backend.common.file_helper import load_txt_file
 from backend.common.llm_request import generate_text
@@ -31,6 +31,7 @@ def ask_for_needed_layers(user_question):
     prompt = base_prompt.replace('{user_frage}', str(user_question))
     layers = generate_text(prompt)
     layers = layers.replace("'", '"')
+    print(layers)
     layers_json = json.loads(layers)
     validate(instance=layers_json, schema=schema)
     print("Manager response:\n" + layers)

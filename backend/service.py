@@ -8,11 +8,12 @@ from backend.layers.validator_layer import validate_user_question
 
 
 def receive_layered_response(user_question):
-    print("User question:\n" + user_question)
+    print("User question: " + user_question)
     results = []
     
     question_validation = validate_user_question(user_question)
     validator_assessment = question_validation.get('assessment')
+    print("Validator Assessment: " + validator_assessment)
     if validator_assessment == 'INVALID':
         validator_reason = question_validation.get('reason')
         return validator_reason
