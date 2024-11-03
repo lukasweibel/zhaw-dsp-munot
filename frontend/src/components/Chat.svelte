@@ -34,6 +34,13 @@
       text = "";
     }
   }
+
+  function handleKeyDown(event) {
+    if (event.key === "Enter" && !event.shiftKey) {
+      event.preventDefault();
+      sendRequest(event);
+    }
+  }
 </script>
 
 <div id="chatContainer">
@@ -47,7 +54,10 @@
 
   <form on:submit={sendRequest}>
     <div class="inputContainer">
-      <textarea bind:value={text} placeholder="Type your message here"
+      <textarea
+        bind:value={text}
+        placeholder="Type your message here"
+        on:keydown={handleKeyDown}
       ></textarea>
       <button type="submit" disabled={isSubmitting}>Send</button>
     </div>
