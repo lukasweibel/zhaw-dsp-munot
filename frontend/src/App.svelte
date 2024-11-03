@@ -1,6 +1,7 @@
 <!-- App.svelte -->
 <script>
   import Chat from "./components/Chat.svelte";
+  import TestForm from "./components/TestForm.svelte";
 
   let currentPage = "chat";
 
@@ -14,7 +15,7 @@
     <h1>Munot DSP Projekt</h1>
     <div>
       <a on:click={() => navigate("chat")}>Chat</a>
-      <a on:click={() => navigate("history")}>Sust öppis</a>
+      <a on:click={() => navigate("history")}>Tests</a>
     </div>
   </div>
 </nav>
@@ -24,7 +25,7 @@
 {/if}
 
 {#if currentPage === "history"}
-  <h1>Irgendöppis</h1>
+  <TestForm />
 {/if}
 
 <style>

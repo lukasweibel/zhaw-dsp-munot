@@ -15,6 +15,7 @@ dataclasses-json==0.6.7
 debugpy==1.8.5
 decorator==5.1.1
 distro==1.9.0
+dnspython==1.16.0
 executing==2.0.1
 faiss-cpu==1.9.0
 Flask==3.0.3
@@ -64,6 +65,7 @@ pydantic==2.9.2
 pydantic-settings==2.5.2
 pydantic_core==2.23.4
 Pygments==2.18.0
+pymongo==3.11.0
 pypdf==5.0.1
 python-dateutil==2.9.0.post0
 python-dotenv==1.0.1
