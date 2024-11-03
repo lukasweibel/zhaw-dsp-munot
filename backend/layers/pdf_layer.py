@@ -30,7 +30,7 @@ def get_pdf_answer(file_path, question):
     prompt = ChatPromptTemplate.from_messages(
         [("system", system_prompt), ("human", "{input}")])
 
-    llm = ChatOpenAI(model="gpt-4")
+    llm = ChatOpenAI(model="gpt-4o-mini")
     question_answer_chain = create_stuff_documents_chain(llm, prompt)
     rag_chain = create_retrieval_chain(retriever, question_answer_chain)
 
