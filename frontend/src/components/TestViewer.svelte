@@ -41,9 +41,10 @@
 
       if (response.ok) {
         const result = await response.json();
-        results[id] = result;
+        results[id] = { success: result.success, actual: result.actual };
         console.log(results);
-        console.log("Test result:", result);
+        console.log("Test success:", result.success);
+        console.log("Test actual:", result.actual);
       } else {
         console.error("Failed to run test:", response.status);
       }
@@ -60,23 +61,55 @@
 {#if data.length > 0}
   <div class="grid-container">
     {#each data as item}
-      <div
-        class="grid-item {results[item._id] === true
+      <details
+        class="grid-item {results[item._id]?.success === true
           ? 'result-true'
-          : results[item._id] === false
+          : results[item._id]?.success === false
             ? 'result-false'
             : ''}"
       >
-        <strong>Name:</strong>
-        {item.name} <br />
-        <strong>Question:</strong>
-        {item.question} <br />
-        <strong>Expected Answer:</strong>
-        {item.expected} <br />
-        <strong>Type:</strong>
-        {item.type} <br />
-        <button on:click={() => runTest(item._id)}>Run</button>
-      </div>
+        <summary>
+          <strong>{item.name}</strong>
+          - Status:
+          {#if results[item._id]?.success === true}
+            <span class="status-pass">Passed</span>
+          {:else if results[item._id]?.success === false}
+            <span class="status-fail">Failed</span>
+          {:else}
+            <span class="status-pending">Not run yet</span>
+          {/if}
+          <!-- Move the Run Test button here -->
+          <button class="run-button" on:click={() => runTest(item._id)}
+            >Run Test</button
+          >
+        </summary>
+        <div class="details-content">
+          <p><strong>Question:</strong> {item.question}</p>
+          <p><strong>Expected Answer:</strong> {item.expected}</p>
+          <p><strong>Type:</strong> {item.type}</p>
+          {#if results[item._id]?.actual}
+            <p><strong>Actual:</strong> {results[item._id]?.actual}</p>
+          {/if}
+          {#if item.result}
+            <div class="previous-results">
+              <h4>Previous Results:</h4>
+              {#each item.result as result}
+                <div class="previous-result">
+                  <p><strong>Actual:</strong> {result.actual}</p>
+                  <p>
+                    <strong>Success:</strong>
+                    {result.success ? "Yes" : "No"}
+                  </p>
+                  <p>
+                    <strong>Timestamp:</strong>
+                    {new Date(result.timestamp).toLocaleString()}
+                  </p>
+                </div>
+              {/each}
+            </div>
+          {/if}
+        </div>
+      </details>
     {/each}
   </div>
 {:else}
@@ -85,24 +118,71 @@
 
 <style>
   .grid-container {
-    display: grid;
-    grid-template-columns: 1fr; /* Single column layout */
+    display: flex;
+    flex-direction: column;
     gap: 16px;
+    width: 100%;
   }
 
   .grid-item {
     border: 1px solid #ccc;
-    padding: 16px;
     border-radius: 8px;
-    text-align: left;
-    background-color: #f9f9f9; /* Default light background */
+    background-color: #f9f9f9;
+    overflow: hidden;
+    width: 100%;
   }
 
-  .result-true {
-    background-color: #d4f8d4; /* Light green background */
+  summary {
+    padding: 16px;
+    cursor: pointer;
+    user-select: none;
+    outline: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
   }
 
-  .result-false {
-    background-color: #f8d4d4; /* Light red background */
+  .run-button {
+    margin-left: 16px;
+  }
+
+  .details-content {
+    padding: 0 16px 16px 16px;
+  }
+
+  .result-true > summary {
+    background-color: #d4f8d4;
+  }
+
+  .result-false > summary {
+    background-color: #f8d4d4;
+  }
+
+  .status-pass {
+    color: green;
+    font-weight: bold;
+  }
+
+  .status-fail {
+    color: red;
+    font-weight: bold;
+  }
+
+  .status-pending {
+    color: gray;
+    font-weight: bold;
+  }
+
+  .previous-results {
+    margin-top: 16px;
+  }
+
+  .previous-result {
+    border-top: 1px solid #ccc;
+    padding-top: 8px;
+  }
+
+  button {
+    margin-top: 16px;
   }
 </style>

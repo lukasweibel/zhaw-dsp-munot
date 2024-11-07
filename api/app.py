@@ -37,8 +37,11 @@ def createTest():
 
 @app.route('/test/run/<id>', methods=['POST'])
 def runOneTestById(id):
-    result = run_test_by_id(id)
-    return jsonify(result)
+    success, actual = run_test_by_id(id)
+    return jsonify({
+        "success": success,
+        "actual": actual
+    })
 
 
 @app.route('/test', methods=['GET'])

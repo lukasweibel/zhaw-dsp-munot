@@ -1,3 +1,4 @@
+from datetime import datetime
 import os
 from dotenv import load_dotenv
 from pymongo import MongoClient
@@ -30,6 +31,23 @@ def get_test_by_id(id):
     except Exception as e:
         print(f"Error fetching document by id {id}: {e}")
         return None
+
+
+def set_result_by_id(id, actual, success):
+    try:
+        result_entry = {
+            "actual": actual,
+            "success": success,
+            "timestamp": datetime.now().isoformat()
+        }
+
+        tests_collection.update_one(
+            {"_id": ObjectId(id)},
+            {"$push": {"result": result_entry}}
+        )
+        print(f"Result added for test with id {id}")
+    except Exception as e:
+        print(f"Error updating result for document by id {id}: {e}")
 
 
 def create_test(data):
