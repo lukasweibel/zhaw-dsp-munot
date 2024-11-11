@@ -7,5 +7,5 @@ def merge_results_to_one_answer(user_question, results):
     prompt = base_prompt.format(
         user_frage=user_question, results=results)
     answer = generate_text(prompt)
-    print("Merge response:\n" + answer)
+    print("MERGE RESPONSE:\n" + answer)
     return answer

@@ -7,8 +7,9 @@ def validate_user_question(user_question):
     base_prompt = load_txt_file('./backend/layers/prompts/validator_question_layer_prompt.txt')
     prompt = f"{base_prompt}\n\nDein zu überprufender Text lautet: \n{user_question}"
     answer = generate_text(prompt)
+    print("QUESTION VALIDATOR RESPONSE UNFORMATTED:\n" + answer)
     answer_json = json.loads(answer)
-    print("Validator response:\n" + answer)
+    print("QUESTION VALIDATOR RESPONSE:\n" + answer)
     return answer_json
 
 
@@ -17,5 +18,5 @@ def validate_sql(user_question):
     prompt = f"{base_prompt}\n\nDein zu überprufender Text lautet: \n{user_question}"
     answer = generate_text(prompt)
     answer_json = json.loads(answer)
-    print("Validator response:\n" + answer)
+    print("SQL VALIDATOR RESPONSE:\n" + answer)
     return answer_json

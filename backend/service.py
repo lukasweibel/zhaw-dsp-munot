@@ -13,7 +13,6 @@ def receive_layered_response(user_question):
     
     question_validation = validate_user_question(user_question)
     validator_assessment = question_validation.get('assessment')
-    print("Validator Assessment: " + validator_assessment)
     if validator_assessment == 'INVALID':
         validator_reason = question_validation.get('reason')
         return validator_reason
@@ -24,8 +23,7 @@ def receive_layered_response(user_question):
         layer_id = layer_obj.get('layer')
         layer_question = layer_obj.get('frage')
 
-        print("Layer ID: " + str(layer_id))
-        print("Question: " + layer_question)
+        print("Layer ID: " + str(layer_id)  + ", Question: " + layer_question)
 
         match layer_id:
             case 1:
@@ -43,8 +41,7 @@ def receive_layered_response(user_question):
                 file_path = "backend/data/Zeitplan_MC_2024.pdf"
                 answer = get_pdf_answer(file_path, layer_question)
                 results.append(answer)
+            case 5:
+                results.append("Für folgende Frage konnte kein Ergebnis ermittelt werden: " + layer_question)
 
-    if len(results) == 1:
-        return results[0]
-    else:
-        return merge_results_to_one_answer(user_question, results)
+    return merge_results_to_one_answer(user_question, results)
