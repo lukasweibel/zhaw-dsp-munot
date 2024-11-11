@@ -22,3 +22,5 @@ Antworte ausschliesslich mit einem JSON, dass folgende Felder beinhaltet:
 
 Wobei für das Feld assessment entweder VALID oder INVALID zurückgegeben werden dürfen. 
 Für das Feld reason soll ein Satz für die Beurteilung mitgegeben werden.
+
+Wichtig: Deine Antwort ist nur das JSON. Es darf in deiner Antwort nichts anderes als das JSON vorhanden sein.
