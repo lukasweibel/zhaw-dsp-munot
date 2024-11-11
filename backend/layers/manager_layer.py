@@ -31,8 +31,7 @@ def ask_for_needed_layers(user_question):
     prompt = base_prompt.replace('{user_frage}', str(user_question))
     layers = generate_text(prompt)
     layers = layers.replace("'", '"')
-    print(layers)
     layers_json = json.loads(layers)
     validate(instance=layers_json, schema=schema)
-    print("Manager response:\n" + layers)
+    print("MANAGER RESPONSE:\n" + layers)
     return layers_json
