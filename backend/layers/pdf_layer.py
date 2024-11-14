@@ -35,6 +35,6 @@ def get_pdf_answer(file_path, question):
     rag_chain = create_retrieval_chain(retriever, question_answer_chain)
 
     results = rag_chain.invoke({"input": question})
-    print("PDF response:\n" + results['answer'])
+    print("PDF RESPONSE:\n" + results['answer'])
 
     return results['answer']

@@ -13,7 +13,6 @@ def receive_layered_response(user_question):
 
     question_validation = validate_user_question(user_question)
     validator_assessment = question_validation.get('assessment')
-    print("Validator Assessment: " + validator_assessment)
     if validator_assessment == 'INVALID':
         validator_reason = question_validation.get('reason')
         return validator_reason
