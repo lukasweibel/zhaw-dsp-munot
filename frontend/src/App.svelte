@@ -1,6 +1,7 @@
 <!-- App.svelte -->
 <script>
   import Chat from "./components/Chat.svelte";
+  import HistoryViewer from "./components/HistoryViewer.svelte";
   import TestForm from "./components/TestForm.svelte";
 
   let currentPage = "chat";
@@ -10,39 +11,42 @@
   }
 </script>
 
-<nav>
+<div class="container">
   <div class="navbar">
-    <h1>Munot DSP Projekt</h1>
-    <div>
-      <a on:click={() => navigate("chat")}>Chat</a>
-      <a on:click={() => navigate("history")}>Tests</a>
-    </div>
+    <nav>
+      <h1>Munot DSP Projekt</h1>
+      <div>
+        <a on:click={() => navigate("chat")}>Chat</a>
+        <a on:click={() => navigate("tests")}>Tests</a>
+      </div>
+      <HistoryViewer />
+    </nav>
   </div>
-</nav>
+  <div class="content">
+    {#if currentPage === "chat"}
+      <Chat />
+    {/if}
 
-{#if currentPage === "chat"}
-  <Chat />
-{/if}
-
-{#if currentPage === "history"}
-  <TestForm />
-{/if}
+    {#if currentPage === "tests"}
+      <TestForm />
+    {/if}
+  </div>
+</div>
 
 <style>
+  .container {
+    display: grid;
+    grid-template-rows: 100px 1fr;
+    height: 100vh;
+    overflow: hidden;
+  }
+
   nav {
-    width: 100%;
     background-color: #0056b3;
-    padding: 1em 0;
-    box-shadow: 0 1px 8px rgba(0, 0, 0, 0.1);
   }
 
   .navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 1em;
+    grid-row: 1;
   }
 
   .navbar h1 {

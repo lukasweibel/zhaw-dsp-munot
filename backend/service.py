@@ -10,7 +10,7 @@ from backend.layers.validator_layer import validate_user_question
 def receive_layered_response(user_question):
     print("User question: " + user_question)
     results = []
-    
+
     question_validation = validate_user_question(user_question)
     validator_assessment = question_validation.get('assessment')
     print("Validator Assessment: " + validator_assessment)
@@ -45,6 +45,8 @@ def receive_layered_response(user_question):
                 results.append(answer)
 
     if len(results) == 1:
-        return results[0]
+        answer = results[0]
     else:
-        return merge_results_to_one_answer(user_question, results)
+        answer = merge_results_to_one_answer(user_question, results)
+
+    return answer

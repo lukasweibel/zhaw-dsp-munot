@@ -54,8 +54,6 @@
   }
 </script>
 
-<h1>Integration Tests</h1>
-
 <button on:click={runAllTests}>Run all tests</button>
 
 {#if data.length > 0}
@@ -69,44 +67,56 @@
             : ''}"
       >
         <summary>
-          <strong>{item.name}</strong>
-          - Status:
-          {#if results[item._id]?.success === true}
-            <span class="status-pass">Passed</span>
-          {:else if results[item._id]?.success === false}
-            <span class="status-fail">Failed</span>
-          {:else}
-            <span class="status-pending">Not run yet</span>
+          <div>
+            <strong>{item.name}</strong>
+            {#if results[item._id]?.success === true}
+              <span class="status-pass">Passed</span>
+            {:else if results[item._id]?.success === false}
+              <span class="status-fail">Failed</span>
+            {:else}
+              <span class="status-pending">Not run yet</span>
+            {/if}
+            <button class="run-button" on:click={() => runTest(item._id)}
+              >Run Test</button
+            >
+          </div>
+          {#if results[item._id]?.actual}
+            <div>
+              <p><strong>Actual:</strong> {results[item._id]?.actual}</p>
+            </div>
           {/if}
-          <!-- Move the Run Test button here -->
-          <button class="run-button" on:click={() => runTest(item._id)}
-            >Run Test</button
-          >
         </summary>
         <div class="details-content">
           <p><strong>Question:</strong> {item.question}</p>
           <p><strong>Expected Answer:</strong> {item.expected}</p>
           <p><strong>Type:</strong> {item.type}</p>
-          {#if results[item._id]?.actual}
-            <p><strong>Actual:</strong> {results[item._id]?.actual}</p>
-          {/if}
           {#if item.result}
-            <div class="previous-results">
-              <h4>Previous Results:</h4>
-              {#each item.result as result}
-                <div class="previous-result">
-                  <p><strong>Actual:</strong> {result.actual}</p>
-                  <p>
-                    <strong>Success:</strong>
-                    {result.success ? "Yes" : "No"}
-                  </p>
-                  <p>
-                    <strong>Timestamp:</strong>
-                    {new Date(result.timestamp).toLocaleString()}
-                  </p>
-                </div>
-              {/each}
-            </div>
+            <details>
+              <summary>Previous Results</summary>
+              <div class="previous-results">
+                {#each item.result as result}
+                  <details
+                    class="grid-item {result.success === true
+                      ? 'result-true'
+                      : result.success === false
+                        ? 'result-false'
+                        : ''}"
+                  >
+                    <summary
+                      ><strong>Run:</strong>
+                      {new Date(result.timestamp).toLocaleString()}</summary
+                    >
+                    <div class="previous-result">
+                      <p><strong>Actual:</strong> {result.actual}</p>
+                      <p>
+                        <strong>Success:</strong>
+                        {result.success ? "Yes" : "No"}
+                      </p>
+                    </div>
+                  </details>
+                {/each}
+              </div>
+            </details>
           {/if}
         </div>
       </details>
@@ -125,15 +135,17 @@
   }
 
   .grid-item {
+    display: flex;
+    flex-direction: column;
     border: 1px solid #ccc;
     border-radius: 8px;
     background-color: #f9f9f9;
     overflow: hidden;
     width: 100%;
+    margin: 0;
   }
 
   summary {
-    padding: 16px;
     cursor: pointer;
     user-select: none;
     outline: none;
@@ -184,5 +196,18 @@
 
   button {
     margin-top: 16px;
+  }
+
+  summary {
+    display: block;
+    padding: 1em;
+    border: 1px solid #ddd;
+    margin-bottom: 1em;
+  }
+
+  summary > div {
+    display: flex;
+    align-items: center;
+    gap: 1em;
   }
 </style>

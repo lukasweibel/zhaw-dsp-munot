@@ -1,6 +1,5 @@
 <script>
   import TestViewer from "./TestViewer.svelte";
-  import { onMount } from "svelte";
 
   let name = "";
   let question = "";
@@ -49,25 +48,27 @@
 </script>
 
 <div class="form-container">
-  <h1>Test Form</h1>
+  <details>
+    <summary>Add Test</summary>
 
-  <form on:submit={submitForm}>
-    <label for="name">Name:</label>
-    <input type="text" id="name" name="name" bind:value={name} />
+    <form on:submit={submitForm}>
+      <label for="name">Name:</label>
+      <input type="text" id="name" name="name" bind:value={name} />
 
-    <label for="question">Question:</label>
-    <input type="text" id="question" name="question" bind:value={question} />
+      <label for="question">Question:</label>
+      <input type="text" id="question" name="question" bind:value={question} />
 
-    <label for="expected">Expected Answer:</label>
-    <input type="text" id="expected" name="expected" bind:value={expected} />
+      <label for="expected">Expected Answer:</label>
+      <input type="text" id="expected" name="expected" bind:value={expected} />
 
-    <label for="type">Type:</label>
-    <select id="type" name="type" bind:value={type}>
-      <option value="IntegrationTest">IntegrationTest</option>
-    </select>
+      <label for="type">Type:</label>
+      <select id="type" name="type" bind:value={type}>
+        <option value="IntegrationTest">IntegrationTest</option>
+      </select>
 
-    <input type="submit" value="Submit" />
-  </form>
+      <input type="submit" value="Submit" />
+    </form>
+  </details>
 
   <TestViewer bind:this={testViewerRef} />
 </div>
@@ -77,7 +78,6 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
     width: 80%;
     margin: 0 auto;
     padding: 2em;
@@ -85,20 +85,31 @@
     border-radius: 8px;
   }
 
+  details {
+    width: 100%;
+  }
+
+  summary {
+    cursor: pointer;
+    font-weight: bold;
+    margin-bottom: 1em;
+  }
+
   form {
     width: 100%;
   }
 
-  label,
-  input,
-  select {
+  label {
     display: block;
-    width: 100%;
-    margin-bottom: 1em;
+    margin-bottom: 0.5em;
+    font-weight: bold;
   }
 
   input[type="text"],
   select {
+    display: block;
+    width: 100%;
+    margin-bottom: 1em;
     padding: 0.5em;
     border: 1px solid #ccc;
     border-radius: 4px;

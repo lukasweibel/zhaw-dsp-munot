@@ -1,22 +1,30 @@
 <script>
+  import { generateUUID } from "../utils/utils";
+  import { chatHistory, currentChatId } from "../stores/chatStore";
+
+  let chatId;
   let text = "";
   let isSubmitting = false;
-  let chatHistory = [];
 
   async function sendRequest(event) {
+    if (!chatId) {
+      chatId = generateUUID();
+      $currentChatId = chatId;
+    }
+
     event.preventDefault();
     if (isSubmitting) return;
 
     isSubmitting = true;
 
     try {
-      chatHistory = [...chatHistory, { sender: "user", message: text }];
+      $chatHistory = [...$chatHistory, { sender: "user", message: text }];
       const response = await fetch("/request", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ text: text }),
+        body: JSON.stringify({ text: text, chatId: chatId }),
       });
 
       if (!response.ok) {
@@ -25,7 +33,10 @@
       }
       text = "";
       const responseData = await response.json();
-      chatHistory = [...chatHistory, { sender: "bot", message: responseData }];
+      $chatHistory = [
+        ...$chatHistory,
+        { sender: "bot", message: responseData },
+      ];
       console.log(chatHistory);
     } catch (error) {
       console.error("Fetch error:", error);
@@ -33,6 +44,8 @@
       isSubmitting = false;
       text = "";
     }
+
+    console.log($chatHistory);
   }
 
   function handleKeyDown(event) {
@@ -45,23 +58,23 @@
 
 <div id="chatContainer">
   <div id="chatHistory">
-    {#each chatHistory as { sender, message }}
+    {#each $chatHistory as { sender, message }}
       <div class={sender === "user" ? "userMessage" : "botMessage"}>
         {sender.charAt(0).toUpperCase() + sender.slice(1) + ": " + message}
       </div>
     {/each}
   </div>
 
-  <form on:submit={sendRequest}>
-    <div class="inputContainer">
+  <div class="inputContainer">
+    <form on:submit={sendRequest} class="inputWrapper">
       <textarea
         bind:value={text}
         placeholder="Type your message here"
         on:keydown={handleKeyDown}
       ></textarea>
       <button type="submit" disabled={isSubmitting}>Send</button>
-    </div>
-  </form>
+    </form>
+  </div>
 </div>
 
 <style>
@@ -72,14 +85,11 @@
   }
 
   #chatHistory {
-    flex: 1;
-    max-height: 400px;
     overflow-y: auto;
     border: 1px solid #ccc;
-    padding: 10px;
     background-color: #f9f9f9;
     border-radius: 10px;
-    margin-bottom: 10px;
+    flex-grow: 1;
   }
 
   .userMessage {
@@ -105,9 +115,9 @@
     max-width: 70%;
   }
 
-  .inputContainer {
+  .inputWrapper {
     display: flex;
-    align-items: center;
+    gap: 5px;
   }
 
   textarea {
@@ -116,17 +126,19 @@
     border-radius: 5px;
     border: 1px solid #ccc;
     padding: 10px;
-    margin-right: 5px;
     flex: 1;
   }
 
   button {
+    width: 80px;
+    height: 50px;
     background-color: #4caf50;
     color: white;
     border: none;
     border-radius: 5px;
-    padding: 10px;
     cursor: pointer;
+    padding: 0 15px;
+    align-items: center;
   }
 
   button:disabled {
