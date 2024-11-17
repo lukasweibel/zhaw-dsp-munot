@@ -1,11 +1,46 @@
 <script>
+  import { testTypes } from "../stores/chatStore";
   import TestViewer from "./TestViewer.svelte";
 
   let name = "";
   let question = "";
   let expected = "";
-  let type = "IntegrationTest";
+  let type = "";
   let testViewerRef;
+  let newTestType = "";
+
+  async function submitTestType(event) {
+    event.preventDefault();
+
+    const formData = {
+      name: newTestType,
+    };
+
+    const response = await fetch("/test/type", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    });
+
+    if (response.ok) {
+      const result = await response.json();
+      console.log("Form submitted successfully:", result);
+
+      testTypes.set([...$testTypes, newTestType]);
+
+      console.log($testTypes);
+
+      // Clear the form fields
+      newTestType = "";
+
+      // Reload TestViewer
+      testViewerRef.reload();
+    } else {
+      console.error("Failed to submit form:", response.status);
+    }
+  }
 
   async function submitForm(event) {
     event.preventDefault();
@@ -49,6 +84,16 @@
 
 <div class="form-container">
   <details>
+    <summary>Add Test Type</summary>
+
+    <form on:submit={submitTestType}>
+      <label for="name">Name:</label>
+      <input type="text" id="name" name="name" bind:value={newTestType} />
+
+      <input type="submit" value="Submit" />
+    </form>
+  </details>
+  <details>
     <summary>Add Test</summary>
 
     <form on:submit={submitForm}>
@@ -63,7 +108,13 @@
 
       <label for="type">Type:</label>
       <select id="type" name="type" bind:value={type}>
-        <option value="IntegrationTest">IntegrationTest</option>
+        {#if $testTypes && $testTypes.length > 0}
+          {#each $testTypes as type}
+            <option value={type}>{type}</option>
+          {/each}
+        {:else}
+          <option disabled value="">Loading test types...</option>
+        {/if}
       </select>
 
       <input type="submit" value="Submit" />

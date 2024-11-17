@@ -16,6 +16,15 @@ tests_collection = db['tests']
 
 chat_collection = db['chats']
 
+testtype_collection = db['testtypes']
+
+
+def get_types():
+    documents = list(testtype_collection.find())
+    for document in documents:
+        document['_id'] = str(document['_id'])
+    return documents
+
 
 def get_tests_by_type():
     documents = list(tests_collection.find())
@@ -99,6 +108,10 @@ def persist_chat(user_input, bot_answer, chat_id):
 
 def create_test(data):
     tests_collection.insert_one(data)
+
+
+def create_test_type(data):
+    testtype_collection.insert_one(data)
 
 
 if __name__ == '__main__':

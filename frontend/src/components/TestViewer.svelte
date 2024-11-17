@@ -1,8 +1,29 @@
 <script>
   import { onMount } from "svelte";
+  import { testTypes } from "../stores/chatStore";
 
   let data = [];
   let results = {};
+
+  async function loadTestTypes() {
+    const response = await fetch(`/test/type`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (response.ok) {
+      const result = await response.json();
+      $testTypes = [];
+      result.forEach((type) => {
+        $testTypes.push(type.name);
+      });
+      console.log($testTypes);
+    } else {
+      console.error("Failed to get types:", response.status);
+    }
+  }
 
   async function loadTests() {
     try {
@@ -17,8 +38,6 @@
       console.error("Error:", error);
     }
   }
-
-  onMount(loadTests);
 
   export function reload() {
     loadTests();
@@ -52,6 +71,11 @@
       console.error("Error:", error);
     }
   }
+
+  onMount(() => {
+    loadTests();
+    loadTestTypes();
+  });
 </script>
 
 <button on:click={runAllTests}>Run all tests</button>

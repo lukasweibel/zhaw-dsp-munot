@@ -3,7 +3,7 @@ import os
 from flask import Flask, jsonify, request, send_from_directory
 from backend.test.integration_tests import run_tests, run_test_by_id
 from backend.service import receive_layered_response
-from backend.db.db_accessor import get_tests_by_type, create_test, persist_chat, get_all_chats
+from backend.db.db_accessor import get_tests_by_type, create_test, persist_chat, get_all_chats, get_types, create_test_type
 
 app = Flask(__name__, static_folder='./../frontend/public', static_url_path='')
 
@@ -52,6 +52,20 @@ def runOneTestById(id):
 def getAllTests():
     tests = get_tests_by_type()
     return jsonify(tests)
+
+
+@app.route('/test/type', methods=['GET'])
+def getAllTestTypes():
+    test_types = get_types()
+    print(test_types)
+    return jsonify(test_types)
+
+
+@app.route('/test/type', methods=['POST'])
+def addTestType():
+    data = request.get_json()
+    create_test_type(data)
+    return jsonify()
 
 
 @app.route('/history', methods=['GET'])

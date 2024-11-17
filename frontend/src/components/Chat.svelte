@@ -60,7 +60,7 @@
   <div id="chatHistory">
     {#each $chatHistory as { sender, message }}
       <div class={sender === "user" ? "userMessage" : "botMessage"}>
-        {sender.charAt(0).toUpperCase() + sender.slice(1) + ": " + message}
+        {message}
       </div>
     {/each}
   </div>
@@ -94,28 +94,28 @@
 
   .userMessage {
     background-color: #a8e6cf;
-    color: black;
     padding: 10px;
     border-radius: 10px;
-    margin: 5px 0;
+    margin: 5px 5px;
     text-align: left;
     align-self: flex-end;
-    max-width: 70%;
+    max-width: 60%;
     margin-left: auto;
+    min-width: none;
   }
 
   .botMessage {
     background-color: #cfd8dc; /* More grey for bot messages */
-    color: black;
     padding: 10px;
     border-radius: 10px;
-    margin: 5px 0;
+    margin: 5px 0 0 5px;
     text-align: left;
     align-self: flex-start;
-    max-width: 70%;
+    max-width: 60%;
   }
 
   .inputWrapper {
+    margin-top: 10px;
     display: flex;
     gap: 5px;
   }

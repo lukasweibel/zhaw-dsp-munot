@@ -16,8 +16,7 @@ def run_tests():
 
 def run_test_by_id(id):
     test = get_test_by_id(id)
-    if test['type'] == 'IntegrationTest':
-        success, actual = run_integration_test(test)
+    success, actual = run_integration_test(test)
     set_result_by_id(id, actual, success)
     return success, actual
 

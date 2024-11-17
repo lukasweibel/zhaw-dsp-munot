@@ -37,8 +37,8 @@
   .container {
     display: grid;
     grid-template-rows: 100px 1fr;
-    height: 100vh;
-    overflow: hidden;
+    height: 98vh;
+    overflow: scroll;
   }
 
   nav {
