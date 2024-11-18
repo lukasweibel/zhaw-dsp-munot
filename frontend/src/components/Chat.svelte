@@ -110,6 +110,7 @@
     border-radius: 10px;
     margin: 5px 0 0 5px;
     text-align: left;
+    white-space: pre-line;
     align-self: flex-start;
     max-width: 60%;
   }
