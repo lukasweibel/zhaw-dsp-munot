@@ -1,9 +1,9 @@
 import os
 
 from flask import Flask, jsonify, request, send_from_directory
-from backend.test.integration_tests import run_tests, run_test_by_id
+from backend.test.integration_tests import run_test_by_id, run_tests_by_type
 from backend.service import receive_layered_response
-from backend.db.db_accessor import get_tests_by_type, create_test, persist_chat, get_all_chats, get_types, create_test_type
+from backend.db.db_accessor import get_tests_by_type, create_test, persist_chat, get_all_chats, get_types, create_test_type, get_tests, get_testruns_by_type, get_testruns_with_results_by_type
 
 app = Flask(__name__, static_folder='./../frontend/public', static_url_path='')
 
@@ -26,17 +26,17 @@ def postRequest():
     return jsonify(response_text)
 
 
-@app.route('/test/run', methods=['POST'])
-def runTest():
-    run_tests()
-    return jsonify()
-
-
 @app.route('/test/create', methods=['POST'])
 def createTest():
     data = request.get_json()
     create_test(data)
     return jsonify()
+
+
+@app.route('/test/type/run/<type>', methods=['POST'])
+def runOneTestByType(type):
+    results = run_tests_by_type(type)
+    return jsonify(results)
 
 
 @app.route('/test/run/<id>', methods=['POST'])
@@ -50,8 +50,14 @@ def runOneTestById(id):
 
 @app.route('/test', methods=['GET'])
 def getAllTests():
-    tests = get_tests_by_type()
+    tests = get_tests()
     return jsonify(tests)
+
+
+@app.route('/test/run/<type>', methods=['GET'])
+def getAllTestrunsByType(type):
+    testruns = get_testruns_with_results_by_type(type)
+    return jsonify(testruns)
 
 
 @app.route('/test/type', methods=['GET'])

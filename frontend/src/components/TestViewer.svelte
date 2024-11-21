@@ -1,9 +1,12 @@
 <script>
   import { onMount } from "svelte";
   import { testTypes } from "../stores/chatStore";
+  import TestStatistics from "./TestStatistics.svelte";
 
   let data = [];
   let results = {};
+  let type;
+  let testsRunning = false;
 
   async function loadTestTypes() {
     const response = await fetch(`/test/type`, {
@@ -44,9 +47,37 @@
   }
 
   async function runAllTests() {
-    for (const item of data) {
-      await runTest(item._id);
+    runTestByType();
+  }
+
+  async function runTestByType() {
+    testsRunning = true;
+    try {
+      const response = await fetch(`/test/type/run/${type}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (response.ok) {
+        const testResults = await response.json();
+        console.log(testResults);
+        testResults.forEach((result) => {
+          results[result.id] = {
+            success: result.success,
+            actual: result.actual,
+          };
+        });
+
+        console.log(results);
+      } else {
+        console.error("Failed to run test:", response.status);
+      }
+    } catch (error) {
+      console.error("Error:", error);
     }
+    testsRunning = false;
   }
 
   async function runTest(id) {
@@ -61,9 +92,6 @@
       if (response.ok) {
         const result = await response.json();
         results[id] = { success: result.success, actual: result.actual };
-        console.log(results);
-        console.log("Test success:", result.success);
-        console.log("Test actual:", result.actual);
       } else {
         console.error("Failed to run test:", response.status);
       }
@@ -72,78 +100,97 @@
     }
   }
 
+  function changeSelection() {}
+
   onMount(() => {
     loadTests();
     loadTestTypes();
   });
 </script>
 
-<button on:click={runAllTests}>Run all tests</button>
+<select id="type" name="type" bind:value={type} on:change={changeSelection}>
+  <option selected value="all">All</option>
+  {#if $testTypes && $testTypes.length > 0}
+    {#each $testTypes as type}
+      <option value={type}>{type}</option>
+    {/each}
+  {:else}
+    <option disabled value="">Loading test types...</option>
+  {/if}
+</select>
+
+{#if type !== "all"}
+  <button on:click={runAllTests} disabled={testsRunning}>Run all tests</button>
+{/if}
+
+<TestStatistics {type} />
 
 {#if data.length > 0}
   <div class="grid-container">
     {#each data as item}
-      <details
-        class="grid-item {results[item._id]?.success === true
-          ? 'result-true'
-          : results[item._id]?.success === false
-            ? 'result-false'
-            : ''}"
-      >
-        <summary>
-          <div>
-            <strong>{item.name}</strong>
-            {#if results[item._id]?.success === true}
-              <span class="status-pass">Passed</span>
-            {:else if results[item._id]?.success === false}
-              <span class="status-fail">Failed</span>
-            {:else}
-              <span class="status-pending">Not run yet</span>
-            {/if}
-            <button class="run-button" on:click={() => runTest(item._id)}
-              >Run Test</button
-            >
-          </div>
-          {#if results[item._id]?.actual}
+      {#if item.type === type || type === "all"}
+        <details
+          class="grid-item {results[item._id]?.success === true
+            ? 'result-true'
+            : results[item._id]?.success === false
+              ? 'result-false'
+              : ''}"
+        >
+          <summary>
             <div>
-              <p><strong>Actual:</strong> {results[item._id]?.actual}</p>
+              <strong>{item.name}</strong>
+              {#if results[item._id]?.success === true}
+                <span class="status-pass">Passed</span>
+              {:else if results[item._id]?.success === false}
+                <span class="status-fail">Failed</span>
+              {:else}
+                <span class="status-pending">Not run yet</span>
+              {/if}
+              <button class="run-button" on:click={() => runTest(item._id)}
+                >Run Test</button
+              >
             </div>
-          {/if}
-        </summary>
-        <div class="details-content">
-          <p><strong>Question:</strong> {item.question}</p>
-          <p><strong>Expected Answer:</strong> {item.expected}</p>
-          <p><strong>Type:</strong> {item.type}</p>
-          {#if item.result}
-            <details>
-              <summary>Previous Results</summary>
-              <div class="previous-results">
-                {#each item.result as result}
-                  <details
-                    class="grid-item {result.success === true
-                      ? 'result-true'
-                      : result.success === false
-                        ? 'result-false'
-                        : ''}"
-                  >
-                    <summary
-                      ><strong>Run:</strong>
-                      {new Date(result.timestamp).toLocaleString()}</summary
-                    >
-                    <div class="previous-result">
-                      <p><strong>Actual:</strong> {result.actual}</p>
-                      <p>
-                        <strong>Success:</strong>
-                        {result.success ? "Yes" : "No"}
-                      </p>
-                    </div>
-                  </details>
-                {/each}
+            {#if results[item._id]?.actual}
+              <div>
+                <p><strong>Actual:</strong> {results[item._id]?.actual}</p>
               </div>
-            </details>
-          {/if}
-        </div>
-      </details>
+            {/if}
+          </summary>
+          <div class="details-content">
+            <p><strong>Question:</strong> {item.question}</p>
+            <p><strong>Expected Answer:</strong> {item.expected}</p>
+            <p><strong>Type:</strong> {item.type}</p>
+            {#if item.result}
+              <details>
+                <summary>Previous Results</summary>
+                <div class="previous-results">
+                  {#each item.result as result}
+                    <details
+                      class="grid-item {result.success === true
+                        ? 'result-true'
+                        : result.success === false
+                          ? 'result-false'
+                          : ''}"
+                    >
+                      <summary
+                        ><strong>Run:</strong>
+                        {new Date(result.timestamp).toLocaleString()}</summary
+                      >
+                      <div class="previous-result">
+                        <p><strong>Actual:</strong> {result.actual}</p>
+                        <p>
+                          <strong>Success:</strong>
+                          {result.success ? "Yes" : "No"}
+                        </p>
+                      </div>
+                    </details>
+                  {/each}
+                </div>
+              </details>
+            {/if}
+          </div>
+        </details>
+      {/if}
     {/each}
   </div>
 {:else}

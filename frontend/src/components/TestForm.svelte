@@ -30,12 +30,8 @@
 
       testTypes.set([...$testTypes, newTestType]);
 
-      console.log($testTypes);
-
-      // Clear the form fields
       newTestType = "";
 
-      // Reload TestViewer
       testViewerRef.reload();
     } else {
       console.error("Failed to submit form:", response.status);
