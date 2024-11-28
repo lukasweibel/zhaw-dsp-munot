@@ -2,11 +2,13 @@
   import { onMount } from "svelte";
   import { testTypes } from "../stores/chatStore";
   import TestStatistics from "./TestStatistics.svelte";
+  import { createExcelOnResults } from "../utils/excel";
 
   let data = [];
   let results = {};
   let type;
   let testsRunning = false;
+  let testStatisticsComponent;
 
   async function loadTestTypes() {
     const response = await fetch(`/test/type`, {
@@ -46,8 +48,10 @@
     loadTests();
   }
 
-  async function runAllTests() {
-    runTestByType();
+  function createEvaluationExcel() {
+    runTestByType().then(() => {
+      createExcelOnResults(results);
+    });
   }
 
   async function runTestByType() {
@@ -67,6 +71,8 @@
           results[result.id] = {
             success: result.success,
             actual: result.actual,
+            question: result.question,
+            expected: result.expected,
           };
         });
 
@@ -78,6 +84,8 @@
       console.error("Error:", error);
     }
     testsRunning = false;
+    testStatisticsComponent.loadTestResults();
+    return;
   }
 
   async function runTest(id) {
@@ -119,11 +127,11 @@
   {/if}
 </select>
 
-{#if type !== "all"}
-  <button on:click={runAllTests} disabled={testsRunning}>Run all tests</button>
-{/if}
+<button on:click={runTestByType} disabled={testsRunning}>Run all tests</button>
 
-<TestStatistics {type} />
+<button on:click={createEvaluationExcel}>Create Evaluation Excel</button>
+
+<TestStatistics {type} bind:this={testStatisticsComponent} />
 
 {#if data.length > 0}
   <div class="grid-container">

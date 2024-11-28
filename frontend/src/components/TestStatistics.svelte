@@ -7,7 +7,7 @@
   let chartCanvas;
   let chartInstance;
 
-  async function loadTestResults() {
+  export async function loadTestResults() {
     const response = await fetch(`/test/run/${type}`, {
       method: "GET",
       headers: {

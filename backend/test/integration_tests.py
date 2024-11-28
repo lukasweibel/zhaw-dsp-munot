@@ -1,10 +1,20 @@
 from functools import partial
-from backend.db.db_accessor import get_tests_by_type, get_test_by_id, set_result_by_id, create_testrun
+from backend.db.db_accessor import get_tests_by_type, get_test_by_id, set_result_by_id, create_testrun, get_types
 from test.TestingHelper import assert_meaning, ask_question
 
 
 def run_tests_by_type(type):
-    tests = get_tests_by_type(type)
+    tests = []
+    print(type)
+    print(type == 'all')
+    if type == 'all':
+        types = get_types()
+        print(types)
+        for t in types:
+            tests += get_tests_by_type(t['name'])
+    else:
+        tests = get_tests_by_type(type)
+
     results = []
     testrun = {
         'type': type
@@ -16,7 +26,9 @@ def run_tests_by_type(type):
         results.append({
             "id": test['_id'],
             "success": success,
-            "actual": actual
+            "actual": actual,
+            "question": test['question'],
+            "expected": test['expected']
         })
     return results
 
