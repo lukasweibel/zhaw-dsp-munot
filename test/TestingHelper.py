@@ -12,7 +12,7 @@ openai.api_key = openai_api_key
 
 
 def ask_question(question):
-    url = "http://127.0.0.1:5000/request"
+    url = os.getenv("SERVICE_URL", "http://127.0.0.1:5000") + "/request"
     data = {"text": question}
     response = requests.post(url, json=data)
     print("-----------------------------------------------------------------------------------")
