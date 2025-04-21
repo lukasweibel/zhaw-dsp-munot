@@ -1,12 +1,15 @@
 from backend.data import in_memory_db
 import requests
 import json
+import os
+
+from dotenv import load_dotenv
 
 def execute_sql(sql_string):
     return in_memory_db.execute_sql(sql_string)
 
 def execute_sql_via_api(sql):
-    url = "https://rangliste.munotcup.ch/backend/raw/878c5b1e-fe76-400e-92f4-2d263c05ce40"
+    url = os.getenv("TARGET_URL")
     headers = {
         "Content-Type": "application/json"
     }
