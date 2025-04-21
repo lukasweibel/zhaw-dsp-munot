@@ -17,6 +17,8 @@ Frontend:
 Backend:
 - flask run
 
+Browser: http://localhost:5000/
+
 ## Integrationstest starten
 Applikation starten
 anderes Fensster
