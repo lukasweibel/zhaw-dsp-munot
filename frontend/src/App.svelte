@@ -15,11 +15,11 @@
   <div class="navbar">
     <nav>
       <h1>Munot DSP Projekt</h1>
-      <div>
+      <div class="desktop-only">
         <a on:click={() => navigate("chat")}>Chat</a>
         <a on:click={() => navigate("tests")}>Tests</a>
+        <HistoryViewer />
       </div>
-      <HistoryViewer />
     </nav>
   </div>
   <div class="content">
