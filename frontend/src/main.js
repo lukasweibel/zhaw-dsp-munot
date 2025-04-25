@@ -1,4 +1,5 @@
 import App from './App.svelte';
+import './mobile.css';
 
 const app = new App({
 	target: document.body,
