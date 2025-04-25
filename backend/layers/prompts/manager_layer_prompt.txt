@@ -19,13 +19,6 @@ Typische Fragen:
 - "Welche Anforderungen müssen die Turner in der Disziplin Boden erfüllen?"
 Verwenden, wenn: Es um Regeln, Vorschriften oder Punktesystem geht.
 
-Zeitplan-Layer (3):
-Beschreibung: Enthält Informationen über den genauen Zeitplan des Munot Cups, inklusive Zeiten und Orte für die verschiedenen Vereine und Disziplinen.
-Typische Fragen:
-- "Wann turnt der TV Hegi am Barren?"
-- "Wo findet die Disziplin Team Aerobic statt?"
-Verwenden, wenn: Es um zeitliche Abläufe, geplante Auftritte oder Austragungsorte geht.
-
 Kombination von Layern:
 Beschreibung: Eine Frage kann mehrere Layer erfordern.
 Typische Frage:
@@ -50,7 +43,6 @@ Gib immer eine Antwort im folgenden JSON-Format zurück:
 Verwende für das Property "layer" die folgenden Werte:
   - Datenbank-Layer: 1
   - Weisungs-Layer: 2
-  - Zeitplan-Layer: 3
   - Fehler/nicht ermittelbar: 5
 Deine Antwort darf ausschließlich aus diesem JSON bestehen, ohne zusätzliche Texte oder Erklärungen.
 
@@ -62,15 +54,6 @@ Antwort:
   {
     "layer": 1,
     "frage": "Auf welchem Rang war Russikon in der Disziplin Team Aerobic?"
-  }
-]
-
-Frage: Wann turnt der TV Hegi am Barren?
-Antwort:
-[
-  {
-    "layer": 3,
-    "frage": "Wann turnt der TV Hegi am Barren?"
   }
 ]
 
