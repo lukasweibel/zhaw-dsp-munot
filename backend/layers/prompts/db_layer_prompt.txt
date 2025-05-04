@@ -45,6 +45,26 @@ CREATE TABLE `ergebnisse_gy` (
   `anzahl_turnende` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+CREATE TABLE `ergebnisse_vgt` (
+  `id` int(9) NOT NULL,
+  `rang` int(11) NOT NULL DEFAULT 999,
+  `verein` int(9) NOT NULL,
+  `disziplin` int(9) NOT NULL,
+  `einzelausfuehrung_1dg` double NOT NULL DEFAULT -1,
+  `synchronitaet_1dg` double NOT NULL DEFAULT -1,
+  `programm_1dg` double NOT NULL DEFAULT -1,
+  `ordabzuege_1dg` double NOT NULL DEFAULT -1,
+  `note_1dg` double NOT NULL DEFAULT -1,
+  `rang_1dg` int(11) NOT NULL DEFAULT 999,
+  `einzelausfuehrung_2dg` double NOT NULL DEFAULT -1,
+  `synchronitaet_2dg` double NOT NULL DEFAULT -1,
+  `programm_2dg` double NOT NULL DEFAULT -1,
+  `ordabzuege_2dg` double NOT NULL DEFAULT -1,
+  `note_2dg` double NOT NULL DEFAULT -1,
+  `total` double NOT NULL DEFAULT -1,
+  `anzahl_turnende` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+
 CREATE TABLE `disziplinen` (
   `id` int(9) NOT NULL,
   `name` varchar(300) NOT NULL,
@@ -73,10 +93,27 @@ CREATE TABLE `verein` (
   `unsubscribed` tinyint(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+CREATE TABLE `vereinmachtdisziplin` (
+  `verein` int(9) NOT NULL,
+  `disziplin` int(9) NOT NULL,
+  `anzahlturner` int(4) NOT NULL,
+  `dauer` time NOT NULL,
+  `erfolge` varchar(500) DEFAULT '',
+  `leitung` varchar(300) DEFAULT '',
+  `vorfuehrungerstmalwettkampf` tinyint(1) DEFAULT NULL,
+  `wieoftdisziplinmunotcup` int(4) DEFAULT NULL,
+  `besonderheiten` varchar(500) DEFAULT ''
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+
 ALTER TABLE `ergebnisse_gy`
   ADD PRIMARY KEY (`id`),
   ADD KEY `verein_gyfk_constraint` (`verein`),
   ADD KEY `disziplin_gyfk_constraint` (`disziplin`);
+
+ALTER TABLE `ergebnisse_vgt`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `verein_fk_constraint` (`verein`),
+  ADD KEY `disziplin_fk_constraint` (`disziplin`);
 
 ALTER TABLE `verein`
   ADD PRIMARY KEY (`id`),
@@ -85,5 +122,10 @@ ALTER TABLE `verein`
 ALTER TABLE `ergebnisse_gy`
   ADD CONSTRAINT `disziplin_gyfk_constraint` FOREIGN KEY (`disziplin`) REFERENCES `disziplinen` (`id`),
   ADD CONSTRAINT `verein_gyfk_constraint` FOREIGN KEY (`verein`) REFERENCES `verein` (`id`);
+
+ALTER TABLE `vereinmachtdisziplin`
+  ADD PRIMARY KEY (`verein`,`disziplin`),
+  ADD KEY `disziplin_vmdfk_constraint` (`disziplin`),
+  ADD KEY `verein_vmdfk_constraint` (`verein`);
 
 Antworte nur mit dem SQL Statement als Text ohne dreifache Anführungszeichen!
