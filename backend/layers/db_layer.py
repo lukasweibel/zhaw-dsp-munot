@@ -11,7 +11,7 @@ def retrieve_data_from_db(user_input):
     if not is_sql_safe(sql):
         print("Generated SQL is not a SELECT")
         return "Fehler beim Erstellen der Datenabfrage"
-    
+
     response = str(execute_sql_via_api(sql))
     print("DATA RESULT RESPONSE:\n" + response)
     return response
@@ -24,13 +24,15 @@ def generate_sql(user_input):
     print("DATA SQL RESPONSE:\n" + sql)
     return sql
 
+
 def clean_sql_content(raw_sql: str) -> str:
     if raw_sql is None or raw_sql.strip() == "":
         print("Generated SQL is empty")
         return "Fehler beim Erstellen der Datenabfrage"
-    
+
     cleaned_sql = raw_sql.replace("```sql", "").replace("```", "").strip()
     return cleaned_sql
+
 
 def is_sql_safe(sql: str) -> bool:
     return bool(re.match(r"(?is)^SELECT.*", sql))
